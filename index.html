@@ -19,7 +19,28 @@ limitations under the License.
   <head>
     <title>Club Selecta</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Desactivar zooming en móviles -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <!-- Web Application Manifest -->
     <link rel="manifest" href="manifest.json">
+
+    <!-- Chrome / Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#171733"> <!-- Color de la barra -->
+    <link rel="icon" sizes="72x72" href="images/touch/icon-72x72.png">
+    <link rel="icon" sizes="192x192" href="images/touch/chrome-touch-icon-192x192.png">
+
+    <!-- Safari / iOS -->
+    <meta name="apple-mobile-web-app-title" content="Club Selecta">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="images/touch/apple-touch-icon.png">
+
+    <!-- Tile color for Win8/10 -->
+    <meta name="msapplication-TileColor" content="black">
+    <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+
     <script>
     window.addEventListener('load', function() {
 
@@ -34,9 +55,22 @@ limitations under the License.
           console.error(whut);
         });
 
-      window.addEventListener('beforeinstallprompt', function(e) {
-        outputElement.textContent = 'beforeinstallprompt Event fired';
-      });
+        window.addEventListener('beforeinstallprompt', function(e) {
+          outputElement.textContent = 'beforeinstallprompt Event fired';
+
+          // e.userChoice will return a Promise. For more details read: http://www.html5rocks.com/en/tutorials/es6/promises/
+          e.userChoice.then(function(choiceResult) {
+
+            console.log(choiceResult.outcome);
+
+            if(choiceResult.outcome == 'dismissed') {
+              outputElement.textContent = 'User cancelled homescreen install';
+            }
+            else {
+              outputElement.textContent = 'User added to homescreen';
+            }
+          });
+        });
     });
     </script>
   </head>
