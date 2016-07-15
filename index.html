@@ -69,6 +69,7 @@ limitations under the License.
           }
         })
         .catch(function(whut) {
+          outputElement.textContent = 'No service worker support :(';
           console.error('uh oh... ');
           console.error(whut);
         });
