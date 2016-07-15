@@ -16,68 +16,79 @@ limitations under the License.
 -->
 
 <html>
-  <head>
-    <title>Club Selecta</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Desactivar zooming en móviles -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<head>
+  <title>Club Selecta</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Web Application Manifest -->
-    <link rel="manifest" href="manifest.json">
+  <!-- Desactivar zooming en móviles -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
-    <!-- Chrome / Android -->
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#171733"> <!-- Color de la barra -->
-    <link rel="icon" sizes="72x72" href="images/touch/icon-72x72.png">
-    <link rel="icon" sizes="192x192" href="images/touch/chrome-touch-icon-192x192.png">
+  <!-- Web Application Manifest -->
+  <link rel="manifest" href="manifest.json">
 
-    <!-- Safari / iOS -->
-    <meta name="apple-mobile-web-app-title" content="Club Selecta">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <link rel="apple-touch-icon" href="images/touch/apple-touch-icon.png">
+  <!-- Chrome / Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#171733">
+  <!-- Color de la barra -->
+  <link rel="icon" sizes="72x72" href="images/touch/icon-72x72.png">
+  <link rel="icon" sizes="192x192" href="images/touch/chrome-touch-icon-192x192.png">
 
-    <!-- Tile color for Win8/10 -->
-    <meta name="msapplication-TileColor" content="black">
-    <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+  <!-- Safari / iOS -->
+  <meta name="apple-mobile-web-app-title" content="Club Selecta">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="images/touch/apple-touch-icon.png">
 
-    <script src="is.js"></script>
+  <!-- Tile color for Win8/10 -->
+  <meta name="msapplication-TileColor" content="black">
+  <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
 
-    <script>
+  <script src="is.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="addtohomescreen.css">
+  <script src="addtohomescreen.js"></script>
+  <script>
+    var addtohome = addToHomescreen({
+      //skipFirstVisit: true,
+      debug: true,
+      displayPace: 0,
+      //maxDisplayCount: 1,
+      autostart: false
+    });
+
     window.addEventListener('load', function() {
-
       var outputElement = document.getElementById('output');
-
-      navigator.serviceWorker.register('service-worker.js', { scope: './' })
+      navigator.serviceWorker.register('service-worker.js', {
+          scope: './'
+        })
         .then(function(r) {
           console.log('registered service worker');
+          if (is.not.android()) {
+            outputElement.textContent = 'No banner :(';
+            addtohome.show();
+          }
         })
         .catch(function(whut) {
           console.error('uh oh... ');
           console.error(whut);
         });
 
-        window.addEventListener('beforeinstallprompt', function(e) {
-          outputElement.textContent = 'Service Worker listo';
-          if (is.android() && is.chrome()) {
-            e.userChoice.then(function(choiceResult) {
-              if(choiceResult.outcome == 'dismissed') {
-                outputElement.textContent = 'El usuario cerró el banner de agregar al homescreen';
-              }
-              else {
-                outputElement.textContent = 'El usuario agregó la aplicación al homescreen';
-              }
-            });
-          }else{
-            e.preventDefault();
-            return false;
+      window.addEventListener('beforeinstallprompt', function(e) {
+        outputElement.textContent = 'Service Worker listo';
+        e.userChoice.then(function(choiceResult) {
+          if (choiceResult.outcome == 'dismissed') {
+            outputElement.textContent = 'El usuario cerró el banner de agregar al homescreen';
+          } else {
+            outputElement.textContent = 'El usuario agregó la aplicación al homescreen';
           }
         });
+      });
     });
-    </script>
-  </head>
-  <body>
-    <h1>Hello world</h1>
-    <h3 id="output"></h3>
-  </body>
+  </script>
+</head>
+
+<body>
+  <h1>Hello world</h1>
+  <h3 id="output"></h3>
+</body>
 </head>
