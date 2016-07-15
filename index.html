@@ -57,22 +57,29 @@ limitations under the License.
     });
 
     window.addEventListener('load', function() {
+      var native_addToHome = false;
       var outputElement = document.getElementById('output');
       navigator.serviceWorker.register('service-worker.js', {
-          scope: './'
-        })
-        .then(function(r) {
-          console.log('registered service worker');
-          if (is.not.android()) {
-            outputElement.textContent = 'No banner :(';
-            addtohome.show();
-          }
-        })
-        .catch(function(whut) {
-          outputElement.textContent = 'No service worker support :(';
-          console.error('uh oh... ');
-          console.error(whut);
-        });
+        scope: './'
+      })
+      .then(function(r) { //Service worker registrado
+        if (is.android() && (is.chrome() || is.opera())) {
+          outputElement.textContent = 'Your browser is supported :D';
+          native_addToHome = true;
+        }else{
+          outputElement.textContent = 'No install banner support :(';
+          addtohome.show();
+        }
+      })
+      .catch(function(whut) {
+        console.error('uh oh... ');
+        console.error(whut);
+      });
+
+      if(!native_addToHome){
+        outputElement.textContent = 'Showing the alternative banner';
+        addtohome.show();
+      }
 
       window.addEventListener('beforeinstallprompt', function(e) {
         outputElement.textContent = 'Service Worker listo';
