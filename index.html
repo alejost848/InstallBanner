@@ -41,6 +41,8 @@ limitations under the License.
     <meta name="msapplication-TileColor" content="black">
     <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
 
+    <script src="is.js"></script>
+
     <script>
     window.addEventListener('load', function() {
 
@@ -56,20 +58,20 @@ limitations under the License.
         });
 
         window.addEventListener('beforeinstallprompt', function(e) {
-          outputElement.textContent = 'beforeinstallprompt Event fired';
-
-          // e.userChoice will return a Promise. For more details read: http://www.html5rocks.com/en/tutorials/es6/promises/
-          e.userChoice.then(function(choiceResult) {
-
-            console.log(choiceResult.outcome);
-
-            if(choiceResult.outcome == 'dismissed') {
-              outputElement.textContent = 'User cancelled homescreen install';
-            }
-            else {
-              outputElement.textContent = 'User added to homescreen';
-            }
-          });
+          outputElement.textContent = 'Service Worker listo';
+          if (is.android() && is.chrome()) {
+            e.userChoice.then(function(choiceResult) {
+              if(choiceResult.outcome == 'dismissed') {
+                outputElement.textContent = 'El usuario cerró el banner de agregar al homescreen';
+              }
+              else {
+                outputElement.textContent = 'El usuario agregó la aplicación al homescreen';
+              }
+            });
+          }else{
+            e.preventDefault();
+            return false;
+          }
         });
     });
     </script>
