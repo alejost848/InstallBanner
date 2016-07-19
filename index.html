@@ -43,8 +43,6 @@ limitations under the License.
   <meta name="msapplication-TileColor" content="black">
   <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
 
-  <script src="is.js"></script>
-
   <link rel="stylesheet" type="text/css" href="addtohomescreen.css">
   <script src="addtohomescreen.js"></script>
   <script>
@@ -55,50 +53,10 @@ limitations under the License.
       //maxDisplayCount: 1,
       autostart: false
     });
-
-    window.addEventListener('load', function() {
-      var native_addToHome = false;
-      var outputElement = document.getElementById('output');
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('service-worker.js', {
-          scope: './'
-        })
-        .then(function(r) { //Service worker registrado
-          if (is.android() && (is.chrome() || is.opera())) {
-            outputElement.textContent = 'Your browser is supported :D';
-            native_addToHome = true;
-          }else{
-            outputElement.textContent = 'No install banner support :(';
-            addtohome.show();
-          }
-        })
-        .catch(function(whut) {
-          console.error('uh oh... ');
-          console.error(whut);
-        });
-      }
-
-      if(native_addToHome == false){
-        outputElement.textContent = 'Showing the alternative banner';
-        addtohome.show();
-      }
-
-      window.addEventListener('beforeinstallprompt', function(e) {
-        outputElement.textContent = 'Service Worker listo';
-        e.userChoice.then(function(choiceResult) {
-          if (choiceResult.outcome == 'dismissed') {
-            outputElement.textContent = 'El usuario cerró el banner de agregar al homescreen';
-          } else {
-            outputElement.textContent = 'El usuario agregó la aplicación al homescreen';
-          }
-        });
-      });
-    });
   </script>
 </head>
 
 <body>
   <h1>Hello world</h1>
-  <h3 id="output"></h3>
 </body>
 </head>
