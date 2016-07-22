@@ -46,17 +46,6 @@ limitations under the License.
 
   <link rel="stylesheet" type="text/css" href="addtohomescreen.css">
   <script src="addtohomescreen.js"></script>
-  <script>
-    var addtohome = addToHomescreen({
-      debug: true,
-      displayPace: 0,
-      detectHomescreen: true,
-      onAdd: function () {
-        output.innerHTML = "Added!";
-        ga('send', 'event', 'addtohomescreen', 'yes');
-      }
-    });
-  </script>
 
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -67,6 +56,21 @@ limitations under the License.
     ga('create', 'UA-17479526-8', 'auto');
     ga('send', 'pageview');
 
+  </script>
+
+  <script>
+    var addtohome = addToHomescreen({
+      debug: true,
+      displayPace: 0,
+      detectHomescreen: "hash",
+      onAdd: function () {
+        document.getElementById('output').innerHTML = "Added!";
+        ga('send', 'pageview', {
+         'page': location.pathname + location.search  + location.hash
+        });
+        ga('send', 'event', 'addtohomescreen', 'yes');
+      }
+    });
   </script>
 </head>
 
