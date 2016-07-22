@@ -62,6 +62,7 @@ limitations under the License.
     var addtohome = addToHomescreen({
       debug: true,
       displayPace: 0,
+      maxDisplayCount: 0,
       detectHomescreen: "hash",
       onAdd: function () {
         document.getElementById('output').innerHTML = "Added!";
@@ -69,6 +70,7 @@ limitations under the License.
          'page': location.pathname + location.search  + location.hash
         });
         ga('send', 'event', 'addtohomescreen', 'yes');
+        ga('send', 'event', 'mobile', 'click to call', '888-259-4979');
       }
     });
   </script>
