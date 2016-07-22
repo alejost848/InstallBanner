@@ -62,14 +62,9 @@ limitations under the License.
     var addtohome = addToHomescreen({
       debug: true,
       displayPace: 0,
-      maxDisplayCount: 0,
-      detectHomescreen: true,
+      detectHomescreen: "hash",
       onAdd: function () {
-        ga('send', 'pageview', {
-         'page': location.pathname + location.search  + location.hash
-        });
         ga('send', 'event', 'addtohomescreen', 'yes');
-        ga('send', 'event', 'mobile', 'click to call', '888-259-4979');
         alert("done");
     	}
     });
@@ -78,6 +73,5 @@ limitations under the License.
 
 <body>
   <h1>Hello world</h1>
-  <h2 id="output">Not added.</h2>
 </body>
 </head>
